@@ -1,0 +1,33 @@
+{
+  "name": "better-auth-mcp",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "cf-typegen": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@fiberplane/hono": "0.5.2",
+    "@modelcontextprotocol/sdk": "^1.11.4",
+    "@neondatabase/serverless": "^0.10.4",
+    "@octokit/rest": "^21.1.1",
+    "agents": "^0.0.88",
+    "better-auth": "1.2.9-beta.1",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.43.1",
+    "drizzle-zod": "^0.7.1",
+    "hono": "^4.7.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@octokit/types": "^14.0.0",
+    "@types/node": "^22.15.19",
+    "drizzle-kit": "^0.30.4",
+    "drizzle-seed": "^0.3.1",
+    "tsx": "^4.19.2",
+    "wrangler": "^4.4.0"
+  }
+}

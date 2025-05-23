@@ -29,7 +29,7 @@ Replace the content with the following configuration:
 
 ### Getting started
 
-Make sure you have Neon set up and configured with your database. Create a .dev.vars file with the `DATABASE_URL` key and value (see: `.dev.vars.example`).
+Make sure you have Neon set up and configured with your database.
 
 ### Project structure
 
@@ -64,7 +64,7 @@ Make sure you have Neon set up and configured with your database. Create a .dev.
 
 ### Environment Variables
 
-Create a .dev.vars file for local development (copied from .env.example) and set up secrets/variables in your Cloudflare Worker environment for deployment.
+Create a `.dev.vars` and `.env`(for better-auth schema generation) file for local development (copied from `.env.example`) and set up secrets/variables in your Cloudflare Worker environment for deployment.
 
 - `DATABASE_URL`: Connection string for your PostgreSQL database.
 - `GITHUB_CLIENT_ID`: Client ID from your GitHub OAuth App.
@@ -78,12 +78,14 @@ Create a .dev.vars file for local development (copied from .env.example) and set
 2. Install dependencies:
 
 ```sh
-npm install
+pnpm install
 ```
 
-3.  Set up environment variables: Create a .dev.vars file from .env.example and fill in your details.
+3.  Set up environment variables: Create a `.dev.vars` and `.env` files from `.env.example` and fill in your details.
 
 4.  Database Migrations
+
+    - Go to `src/lib/auth.ts` and uncomment the code from **Line-36** to generate auth schema.
 
     - Generate better-auth migrations:
 
@@ -108,7 +110,7 @@ pnpm dev
 Set your secrets (and any other secrets you need) with wrangler:
 
 ```sh
-npx wrangler secret put MY_INSANE
+pnpm wrangler secret bulk .dev.vars
 ```
 
 Deploy with wrangler:

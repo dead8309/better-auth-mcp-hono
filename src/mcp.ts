@@ -39,17 +39,6 @@ export class MyAgent extends McpAgent<Environment, State, Props> {
       "Returns information about the authenticated user stored in database.",
       {},
       async () => {
-        if (!this.props?.session) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: "User not authenticated or info not available.",
-              },
-            ],
-          };
-        }
-
         const userId = this.props.session.userId;
         const user = await this.db.query.users.findFirst({
           where: eq(users.id, userId),

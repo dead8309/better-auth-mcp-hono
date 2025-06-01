@@ -1,9 +1,7 @@
 import { createFiberplane, createOpenAPISpec } from "@fiberplane/hono";
-import { createAuth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { AppBindings } from "@/types";
 import { Hono } from "hono";
-import { parseEnv } from "@/env";
-import { env } from "cloudflare:workers";
 import { cors } from "hono/cors";
 import withSession from "@/middleware/with-session";
 import { configDotenv } from "dotenv";
@@ -13,11 +11,6 @@ import mcpRouter, { MyAgent } from "@/mcp";
 configDotenv();
 
 const app = new Hono<AppBindings>();
-
-app.use((c, next) => {
-  c.env = parseEnv(Object.assign({}, process.env, env));
-  return next();
-});
 
 app.use(
   "*",
@@ -53,7 +46,6 @@ app.use("/api/auth/*", async (c, next) => {
 });
 
 app.on(["POST", "GET"], "/api/auth/*", (c) => {
-  const auth = createAuth(c.env);
   return auth.handler(c.req.raw);
 });
 

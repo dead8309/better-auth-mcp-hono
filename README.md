@@ -31,30 +31,6 @@ Replace the content with the following configuration:
 
 Make sure you have Neon set up and configured with your database.
 
-### Project structure
-
-```#
-.
-├── README.md
-├── src
-│   ├── db                  # Database schema and setup
-│   │   ├── index.ts
-│   │   └── schema.ts
-│   ├── env-runtime.ts
-│   ├── env.ts
-│   ├── index.ts
-│   ├── lib
-│   │   └── auth.ts         # better-auth configuration
-│   ├── mcp.ts              # MCP Durable Object (MyAgent) & MCP routes
-│   ├── middleware          # Hono middlewares
-│   │   └── with-session.ts
-│   ├── routes              # HTTP routes
-│   │   ├── auth.tsx
-│   │   └── user.ts
-│   └── types.ts
-└── wrangler.jsonc
-```
-
 ### Prerequisites
 
 - Node.js and npm/yarn/pnpm
@@ -64,42 +40,27 @@ Make sure you have Neon set up and configured with your database.
 
 ### Environment Variables
 
-Create a `.dev.vars` and `.env`(for better-auth schema generation) file for local development (copied from `.env.example`) and set up secrets/variables in your Cloudflare Worker environment for deployment.
-
-- `DATABASE_URL`: Connection string for your PostgreSQL database.
-- `GITHUB_CLIENT_ID`: Client ID from your GitHub OAuth App.
-- `GITHUB_CLIENT_SECRET`: Client Secret from your GitHub OAuth App.
-- `BETTER_AUTH_SECRET`: A strong, unique secret string (e.g., openssl rand -hex 32) used by better-auth for signing cookies and tokens. This is critical for security.
-- `BETTER_AUTH_URL`: The root URL of your deployed Cloudflare Worker (e.g., https://your-app-name.your-workers-subdomain.workers.dev). This is used by better-auth to construct redirect URIs.
+Create a `.dev.vars` and `.env`(for better-auth schema generation) file for
+local development (copied from `.env.example`) and set up secrets/variables in
+your Cloudflare Worker environment for deployment.
 
 ### Getting Started
 
 1. Clone the repository.
+
+```sh
+git clone https://github.com/dead8309/better-auth-mcp-hono/
+```
+
 2. Install dependencies:
 
 ```sh
 pnpm install
 ```
 
-3.  Set up environment variables: Create a `.dev.vars` and `.env` files from `.env.example` and fill in your details.
+3.  Set up environment variables: Create a `.dev.vars` and `.env` files from `.env.example`.
 
-4.  Database Migrations
-
-    - Go to `src/lib/auth.ts` and uncomment the code from **Line-36** to generate auth schema.
-
-    - Generate better-auth migrations:
-
-    ```
-    pnpm dlx @better-auth/cli@latest generate
-    ```
-
-    - Apply migrations:
-
-    ```
-    pnpm db:migrate
-    ```
-
-5.  Run the development server:
+4.  Run the development server:
 
 ```
 pnpm dev

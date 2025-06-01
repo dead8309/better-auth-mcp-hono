@@ -1,4 +1,4 @@
-import { createAuth } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { AppBindings } from "@/types";
 import { Hono } from "hono";
 import { html } from "hono/html";
@@ -6,7 +6,6 @@ import { html } from "hono/html";
 const authRouter = new Hono<AppBindings>();
 
 authRouter.get("/sign-in", async (c) => {
-  const auth = createAuth(c.env);
   const githubAuthUrlResult = await auth.api.signInSocial({
     body: {
       provider: "github",
@@ -29,7 +28,6 @@ authRouter.get("/sign-in", async (c) => {
 });
 
 authRouter.get("/sign-out", async (c) => {
-  const auth = createAuth(c.env);
   await auth.api.signOut({
     headers: c.req.raw.headers,
   });

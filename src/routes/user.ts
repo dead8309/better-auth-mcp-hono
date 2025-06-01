@@ -1,4 +1,4 @@
-import { createDb } from "@/db";
+import { db } from "@/db";
 import { users } from "@/db/schema";
 import { AppBindings } from "@/types";
 import { eq } from "drizzle-orm";
@@ -10,7 +10,6 @@ const router = new Hono<AppBindings>();
 
 router.get("/:id", async (c) => {
   const { id } = c.req.param();
-  const db = createDb(c.env);
   const user = await db.query.users.findFirst({
     where: eq(users.id, id),
   });

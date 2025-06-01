@@ -1,5 +1,4 @@
 import { McpAgent } from "agents/mcp";
-import { Environment } from "@/env";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import {
   OAuthAccessToken,
@@ -7,8 +6,8 @@ import {
   withMcpAuth,
 } from "better-auth/plugins";
 import { Octokit } from "@octokit/rest";
-import { createAuth } from "@/lib/auth";
-import { createDb } from "@/db";
+import { auth } from "@/lib/auth";
+import { db } from "@/db";
 import { eq, and } from "drizzle-orm";
 import { accounts, users } from "@/db/schema";
 import { Hono } from "hono";
@@ -20,18 +19,11 @@ type Props = {
 
 type State = null;
 
-export class MyAgent extends McpAgent<Environment, State, Props> {
-  db: ReturnType<typeof createDb>;
-
+export class MyAgent extends McpAgent<Env, State, Props> {
   server = new McpServer({
     name: "Mcp Server",
     version: "1.0.0",
   });
-
-  constructor(ctx: DurableObjectState, env: Environment) {
-    super(ctx, env);
-    this.db = createDb(env);
-  }
 
   async init() {
     this.server.tool(
@@ -40,7 +32,7 @@ export class MyAgent extends McpAgent<Environment, State, Props> {
       {},
       async () => {
         const userId = this.props.session.userId;
-        const user = await this.db.query.users.findFirst({
+        const user = await db.query.users.findFirst({
           where: eq(users.id, userId),
         });
         return {
@@ -59,7 +51,7 @@ export class MyAgent extends McpAgent<Environment, State, Props> {
       "Returns github account information for the authenticated user",
       {},
       async () => {
-        const account = await this.db.query.accounts.findFirst({
+        const account = await db.query.accounts.findFirst({
           where: and(
             eq(accounts.userId, this.props.session.userId),
             eq(accounts.providerId, "github")
@@ -83,14 +75,11 @@ export class MyAgent extends McpAgent<Environment, State, Props> {
 const router = new Hono<AppBindings>();
 
 router.get("/.well-known/oauth-authorization-server", async (c) => {
-  const auth = createAuth(c.env);
   const handler = oAuthDiscoveryMetadata(auth);
   return handler(c.req.raw);
 });
 
 router.all("/sse/*", (c) => {
-  const auth = createAuth(c.env);
-
   const agent = (req: Request, session: OAuthAccessToken) => {
     (c.executionCtx as any).props = {
       session,

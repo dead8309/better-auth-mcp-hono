@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/dead8309-better-auth-mcp-hono-badge.png)](https://mseep.ai/app/dead8309-better-auth-mcp-hono)
+
 ## 🪿 HONC Mcp Server
 
 This is a project created with the `create-honc-app` template, extended to function as an MCP (Model Context Protocol) server with user authentication via GitHub, powered by `better-auth`.
